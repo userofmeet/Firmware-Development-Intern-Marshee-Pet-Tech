@@ -1,5 +1,6 @@
-// This file contains a sample code to check the simulation for checking the microcontroller and QMI8658 IMU which is intergrated in the controller itself. 
-// You can upload it using the Arduino IDE and select the module as ESP32-S3 controller. The credits for this code goes to Swetha Kanathi and the firmware team.
+// This file contains a sample code to check the simulation for checking the microcontroller and QMI8658 IMU 
+// which is intergrated in the controller itself. You can upload it using the Arduino IDE and select the module 
+// as ESP32-S3 controller. The credits for this code goes to Swetha Kanathi and the firmware team.
 
 #include <Arduino.h>
 #include <Wire.h>
