@@ -11,7 +11,9 @@
     void onWrite(BLECharacteristic* pCharacteristic) override {
       String incomingValue = String((char*)pCharacteristic->getValue().c_str()); 
       // Receive the custom text from the user.
-      //  We can edit the code such that the application being used can pre fetch the GPS coordinates and send to the device via BLE instead of the user inputs 
+      
+      //  We can edit the code such that the application being used can pre fetch the 
+      // GPS coordinates and send to the device via BLE instead of the user inputs 
 
       if (incomingValue.length() > 0) {
         String response = "ESP32 says: " + incomingValue;
