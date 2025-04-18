@@ -56,6 +56,8 @@ This guide will walk you through setting up ESP-IDF version 5.4.1 on Windows, bu
 
 ## 🧰 Youtube Video Reference
 If you're facing issues with the IDF terminal in VS Code, refer to the following YouTube tutorials:
+
 [Installing the ESP-IDF](https://youtu.be/5IuZ-E8Tmhg?feature=shared)
+
 [Terminal Fix](https://youtu.be/N93RvZz6dEc?feature=shared)
    
