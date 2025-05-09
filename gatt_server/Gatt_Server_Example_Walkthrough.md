@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In this document, we review the GATT SERVER example code which implements a Bluetooth Low Energy (BLE) Generic Attribute Profile (GATT) Server on the ESP32. This example is designed around two Application Profiles and a series of events that are handled in order to execute a sequence of configuration steps, such as defining advertising parameters, updating connection parameters and creating services and characteristics. In addition, this example handles read and write events, including a Write Long Characteristic request, which divides the incoming data into chunks so that the data can fit in the Attribute Protocol (ATT) message. This document follows the program workflow and breaks down the code in order to make sense of every section and reasoning behind the implementation.
+In this document, we review the GATT SERVER code which implements a Bluetooth Low Energy (BLE) Generic Attribute Profile (GATT) Server on the ESP32. This example is designed around two Application Profiles and a series of events that are handled in order to execute a sequence of configuration steps, such as defining advertising parameters, updating connection parameters and creating services and characteristics. In addition, this example handles read and write events, including a Write Long Characteristic request, which divides the incoming data into chunks so that the data can fit in the Attribute Protocol (ATT) message. This document follows the program workflow and breaks down the code in order to make sense of every section and reasoning behind the implementation.
 
 ## Includes
 
