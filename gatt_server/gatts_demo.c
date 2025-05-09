@@ -229,6 +229,10 @@ static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param
         break;
     }
 }
+#define MAX_DATA_LEN 100
+static uint8_t gatt_data[MAX_DATA_LEN] = {0};
+static uint16_t gatt_data_len = 0;
+
 
 void example_write_event_env(esp_gatt_if_t gatts_if, prepare_type_env_t *prepare_write_env, esp_ble_gatts_cb_param_t *param){
     esp_gatt_status_t status = ESP_GATT_OK;
@@ -332,20 +336,7 @@ static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_i
 #endif
         esp_ble_gatts_create_service(gatts_if, &gl_profile_tab[PROFILE_A_APP_ID].service_id, GATTS_NUM_HANDLE_TEST_A);
         break;
-    case ESP_GATTS_READ_EVT: {
-        ESP_LOGI(GATTS_TAG, "GATT_READ_EVT, conn_id %d, trans_id %" PRIu32 ", handle %d", param->read.conn_id, param->read.trans_id, param->read.handle);
-        esp_gatt_rsp_t rsp;
-        memset(&rsp, 0, sizeof(esp_gatt_rsp_t));
-        rsp.attr_value.handle = param->read.handle;
-        rsp.attr_value.len = 4;
-        rsp.attr_value.value[0] = 0xde;
-        rsp.attr_value.value[1] = 0xed;
-        rsp.attr_value.value[2] = 0xbe;
-        rsp.attr_value.value[3] = 0xef;
-        esp_ble_gatts_send_response(gatts_if, param->read.conn_id, param->read.trans_id,
-                                    ESP_GATT_OK, &rsp);
-        break;
-    }
+    
     case ESP_GATTS_WRITE_EVT: {
         ESP_LOGI(GATTS_TAG, "GATT_WRITE_EVT, conn_id %d, trans_id %" PRIu32 ", handle %d", param->write.conn_id, param->write.trans_id, param->write.handle);
         if (!param->write.is_prep){
@@ -382,14 +373,51 @@ static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_i
                     ESP_LOGI(GATTS_TAG, "notify/indicate disable ");
                 }else{
                     ESP_LOGE(GATTS_TAG, "unknown descr value");
-                    esp_log_buffer_hex(GATTS_TAG, param->write.value, param->write.len);
+                    esp_log_buffer_hex(GATTS_TAG, param->write.value, param->write.len);	
                 }
-
             }
+            memset(gatt_data, 0, MAX_DATA_LEN);
+    		memcpy(gatt_data, param->write.value, param->write.len);
+    		gatt_data_len = param->write.len;
+
+    ESP_LOGI(GATTS_TAG, "Written Text: %.*s", gatt_data_len, gatt_data);
         }
         example_write_event_env(gatts_if, &a_prepare_write_env, param);
         break;
     }
+    
+    case ESP_GATTS_READ_EVT: {
+    ESP_LOGI(GATTS_TAG, "GATT_READ_EVT, conn_id %d, trans_id %" PRIu32 ", handle %d", 
+             param->read.conn_id, param->read.trans_id, param->read.handle);
+
+    esp_gatt_rsp_t rsp;
+    memset(&rsp, 0, sizeof(esp_gatt_rsp_t));
+    rsp.attr_value.handle = param->read.handle;
+
+    // Check if the handle corresponds to your characteristic
+    if (param->read.handle == gl_profile_tab[PROFILE_A_APP_ID].char_handle) {
+        // Respond with the last written data
+        rsp.attr_value.len = gatt_data_len;  // Length of written data
+        memcpy(rsp.attr_value.value, gatt_data, gatt_data_len);
+        ESP_LOGI(GATTS_TAG, "Responding with written data: %.*s", gatt_data_len, gatt_data);
+    } else {
+        // Respond with default values (your original functionality)
+        rsp.attr_value.len = 4;  // Predefined length
+        rsp.attr_value.value[0] = 0xde;
+        rsp.attr_value.value[1] = 0xed;
+        rsp.attr_value.value[2] = 0xbe;
+        rsp.attr_value.value[3] = 0xef;
+        ESP_LOGI(GATTS_TAG, "Responding with default values: 0xde 0xed 0xbe 0xef");
+    }
+
+    // Send response
+    esp_ble_gatts_send_response(gatts_if, param->read.conn_id, param->read.trans_id,
+                                ESP_GATT_OK, &rsp);
+    break;
+}
+
+
+    
     case ESP_GATTS_EXEC_WRITE_EVT:
         ESP_LOGI(GATTS_TAG,"ESP_GATTS_EXEC_WRITE_EVT");
         esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
