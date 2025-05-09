@@ -147,7 +147,7 @@ The functions `gatts_event_handler()` and `gap_event_handler()` handle all the e
 
 The GATT Server example application is organized by using Application Profiles as shown in the figure below. Each Application Profile describes a way to group functionalities that are designed for one client application, such as a mobile app running on a smartphone or tablet. In this way, a single design, enabled by different Application Profiles, can behave differently when used by different smartphone apps, allowing the server to react differently according to the client app that is being used. In practice, each profile is seen by the client as an independent BLE service. It is up to the client to discriminate the services that it is interested in.
 
-<div align="center"><img src="gatt_server/GATT_Server_Figure_1.png" width = "400" alt="Application Profiles are used to organize a BLE application in order to implement different functionality for different clients." align=center /> </div>
+<div align="center"><img src="GATT_Server_Figure_1.png" width = "400" alt="Application Profiles are used to organize a BLE application in order to implement different functionality for different clients." align=center /> </div>
 
 
 Each profile is defined as a struct where the struct members depend on the services and characteristics that are implemented in that Application Profile. The members also include a GATT interface, Application ID, Connection ID and a callback function to handle profile events. In this example, each profile is composed by:
@@ -765,7 +765,7 @@ case ESP_GATTS_WRITE_EVT: {
 }
 ```
 
-<div align="center"> <img src="gatt_server/GATT_Server_Figure_2.png" width = "650" alt="Message flow for Write Long Characteristic" align=center /> </div>
+<div align="center"> <img src="GATT_Server_Figure_2.png" width = "650" alt="Message flow for Write Long Characteristic" align=center /> </div>
 
 The `example_write_event_env()` function contains the logic for the write long characteristic procedure:
 
