@@ -1,4 +1,4 @@
-# Gatt Server Example Walkthrough
+# Gatt Server Walkthrough
 
 ## Introduction
 
